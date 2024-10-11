@@ -109,7 +109,7 @@ const Login = () => {
             </button>
           )}
 
-          <p className="text-center">
+          <p className="text-center cursor-pointer" onClick={()=>navigate('/signUp')}>
             {" "}
             Don't have an account?{" "}
             <span className="text-red-600 font-semibold">Sign up</span>
