@@ -24,7 +24,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login Successfully");
-        navigate("/");
+        navigate("/dashboard");
         setLoading(false);
       }
     } catch (error) {
