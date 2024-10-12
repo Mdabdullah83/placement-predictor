@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="w-full flex flex-col">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/dashboard/*" element={<DashboardLayout />} />
