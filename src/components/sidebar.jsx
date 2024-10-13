@@ -24,6 +24,7 @@ const Sidebar = () => {
                 ? "bg-primary shadow-lg"
                 : "bg-white"
             } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
+            onClick={()=>navigate('/dashboard')}
           >
             <MdSpaceDashboard
               className={` ${

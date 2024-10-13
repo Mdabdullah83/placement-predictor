@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 const QuizItemCard = ({ image, title, time }) => {
+  const navigate=useNavigate();
   return (
-    <div className="w-4/12 flex justify-center items-center px-2 py-2">
+    <div className="w-4/12 flex justify-center items-center px-2 py-2" onClick={()=>navigate('/dashboard/quiz-view')}>
       <div
         className="h-[200px] w-full bg-cover rounded-xl border overflow-hidden"
         style={{ backgroundImage: `url(${image})` }}

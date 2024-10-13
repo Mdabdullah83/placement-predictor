@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginImg from "../assets/images/login-img.png";
 import { FaEye } from "react-icons/fa";
@@ -24,6 +24,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login Successfully");
+        localStorage.setItem('quiz_access_token',response.data.data.token)
         navigate("/dashboard");
         setLoading(false);
       }
@@ -33,6 +34,12 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+    if(localStorage.getItem('quiz_access_token')){
+      navigate('/dashboard');
+    }
+  },[])
 
   return (
     <div className="w-full flex items-center justify-center gap-[20px] bg-white py-10 overflow-y-hidden h-[100vh]">
