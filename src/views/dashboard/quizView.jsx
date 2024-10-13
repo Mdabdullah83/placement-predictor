@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaFlag } from "react-icons/fa";
 import { FaClock } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
@@ -23,8 +23,81 @@ import { IoListOutline } from "react-icons/io5";
 import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
+import { FaQuestion } from "react-icons/fa6";
+
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const QuizView = () => {
+  const [open, setOpen] = React.useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [score, setScore] = useState(0);
+  const [isSubmitScreenShow, setIsSubmitScreenShow] = useState(false);
+  const [isScoreScreenShow, setIsScoreScreenShow] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+
+  const questions = [
+    {
+      id: 1,
+      question: "What is the capital of France?",
+      options: [
+        { id: 1, option: "Paris", isCorrect: true },
+        { id: 2, option: "India", isCorrect: false },
+        { id: 3, option: "Nepal", isCorrect: false },
+        { id: 4, option: "Iceland", isCorrect: false },
+      ],
+    },
+    {
+      id: 2,
+      question: "What is 2 + 2?",
+      options: [
+        { id: 1, option: "3", isCorrect: false },
+        { id: 2, option: "4", isCorrect: true },
+        { id: 3, option: "5", isCorrect: false },
+        { id: 4, option: "6", isCorrect: false },
+      ],
+    },
+    // Add more questions here
+  ];
+
+  // Start quiz by opening dialog
+  const handleStartQuiz = () => {
+    setOpen(true);
+    setCurrentQuestion(0);
+    setSelectedOption(null);
+  };
+
+  // Handle option selection
+  const handleOptionClick = (optionId) => {
+    setSelectedOption(optionId);
+
+    if (
+      questions[currentQuestion].options.find((opt) => opt.id === optionId)
+        .isCorrect
+    ) {
+      setScore((prev) => prev + 1);
+    }
+  };
+
+  // Move to the next question
+  const handleNextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedOption(null);
+    } else {
+      setIsSubmitScreenShow(true);
+      // alert(`Quiz finished! Your score is ${score}/${questions.length}`);
+      // setOpen(false); // Close quiz after completion
+    }
+  };
+
   return (
     <div
       className="w-full flex gap-[20px] my-2 pb-5 h-full overflow-hidden pe-3"
@@ -71,7 +144,10 @@ const QuizView = () => {
                 <p className="text-sm text-secondary">80 Points</p>
               </div>
             </div>
-            <button className="text-white bg-primary rounded-lg w-max px-8 py-2 my-4">
+            <button
+              className="text-white bg-primary rounded-lg w-max px-8 py-2 my-4"
+              onClick={handleStartQuiz}
+            >
               Start Quiz
             </button>
           </div>
@@ -190,6 +266,90 @@ const QuizView = () => {
           </div>
         </div>
       </div>
+
+      {/**=========== dialog box for questions */}
+      <Dialog open={open} handler={handleOpen} className="rounded-3xl">
+        {!isSubmitScreenShow ? (
+          <div className="w-full bg-white p-5 rounded-3xl">
+            <h1 className="text-center text-xl font-semibold text-black">
+              Question {currentQuestion + 1}/{questions.length}
+            </h1>
+            <p className="my-4 text-base font-normal text-black">
+              {questions[currentQuestion].question}
+            </p>
+
+            {/**========== options ======== */}
+            <div className="w-full flex flex-col">
+              {questions[currentQuestion].options.map((option) => (
+                <div
+                  key={option.id}
+                  className={`group w-full rounded-xl border px-4 py-4 cursor-pointer my-2 
+                    ${
+                      selectedOption === option.id
+                        ? "bg-primary text-white"
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                  onClick={() => handleOptionClick(option.id)}
+                >
+                  <p className="text-sm">{option.option}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="w-full flex justify-end my-3">
+              <button
+                className="bg-primary text-white px-8 py-2 rounded-xl"
+                onClick={handleNextQuestion}
+                disabled={selectedOption === null}
+              >
+                {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
+              </button>
+            </div>
+          </div>
+        ) : !isScoreScreenShow ? (
+          <div className="w-full bg-white p-5 rounded-3xl flex flex-col justify-center items-center">
+            <div className="p-8 flex justify-center items-center shadow-xl bg-primary rounded-full mt-6">
+              <FaQuestion className="text-white text-6xl" />
+            </div>
+            <p className="my-5 text-center text-black text-xl">
+              Are you Sure , You want to submit Quiz?
+            </p>
+            <div className="w-6/12 flex justify-between my-8">
+              <button
+                className="border-2 border-primary rounded-xl px-6 py-2 text-primary"
+                onClick={() => setIsSubmitScreenShow(false)}
+              >
+                No
+              </button>
+              <button
+                className="bg-primary text-white rounded-xl px-6 py-2"
+                onClick={() => setIsScoreScreenShow(true)}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full bg-white p-5 rounded-3xl flex flex-col justify-center items-center">
+            <img src={badgeImg1} alt="" className="my-6" />
+            <h1 className="text-center my-2 mt-4 font-semibold text-2xl text-black">
+              Congratulations you have passed
+            </h1>
+            <p className="text-center my-2 text-black">
+              You Scored {(score / questions.length) * 100} %
+            </p>
+            <div className="w-6/12 flex justify-center my-8">
+             
+              <button
+                className="bg-primary text-white rounded-xl px-6 py-2"
+                onClick={() =>setOpen(false)}
+              >
+                Go Home
+              </button>
+            </div>
+          </div>
+        )}
+      </Dialog>
     </div>
   );
 };
