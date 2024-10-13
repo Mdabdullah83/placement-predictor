@@ -267,7 +267,7 @@ const QuizView = () => {
         </div>
       </div>
 
-      {/**=========== dialog box for questions */}
+      {/**=========== dialog box for questions and options */}
       <Dialog open={open} handler={handleOpen} className="rounded-3xl">
         {!isSubmitScreenShow ? (
           <div className="w-full bg-white p-5 rounded-3xl">
