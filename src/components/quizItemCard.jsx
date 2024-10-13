@@ -1,8 +1,21 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-const QuizItemCard = ({ image, title, time }) => {
+const QuizItemCard = ({ image, title, time,questions }) => {
   const navigate=useNavigate();
+  const handleNavigate = () => {
+    navigate('/dashboard/quiz-view',{state:{
+      image:image,
+      title:title,
+      time:time,
+      questions:questions
+    }})
+  }
+
+  useEffect(()=>{
+    console.log("questions:",questions);
+  },[])
   return (
-    <div className="w-4/12 flex justify-center items-center px-2 py-2" onClick={()=>navigate('/dashboard/quiz-view')}>
+    <div className="w-4/12 flex justify-center items-center px-2 py-2" onClick={()=>handleNavigate()}>
       <div
         className="h-[200px] w-full bg-cover rounded-xl border overflow-hidden"
         style={{ backgroundImage: `url(${image})` }}

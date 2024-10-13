@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaFlag } from "react-icons/fa";
 import { FaClock } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
@@ -25,15 +26,11 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaQuestion } from "react-icons/fa6";
 
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { Dialog } from "@material-tailwind/react";
 
 const QuizView = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = React.useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -41,31 +38,9 @@ const QuizView = () => {
   const [isSubmitScreenShow, setIsSubmitScreenShow] = useState(false);
   const [isScoreScreenShow, setIsScoreScreenShow] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const [questions, setQuestions] = useState([]);
 
-  const questions = [
-    {
-      id: 1,
-      question: "What is the capital of France?",
-      options: [
-        { id: 1, option: "Paris", isCorrect: true },
-        { id: 2, option: "India", isCorrect: false },
-        { id: 3, option: "Nepal", isCorrect: false },
-        { id: 4, option: "Iceland", isCorrect: false },
-      ],
-    },
-    {
-      id: 2,
-      question: "What is 2 + 2?",
-      options: [
-        { id: 1, option: "3", isCorrect: false },
-        { id: 2, option: "4", isCorrect: true },
-        { id: 3, option: "5", isCorrect: false },
-        { id: 4, option: "6", isCorrect: false },
-      ],
-    },
-    // Add more questions here
-  ];
+  const handleOpen = () => setOpen(!open);
 
   // Start quiz by opening dialog
   const handleStartQuiz = () => {
@@ -93,10 +68,15 @@ const QuizView = () => {
       setSelectedOption(null);
     } else {
       setIsSubmitScreenShow(true);
-      // alert(`Quiz finished! Your score is ${score}/${questions.length}`);
-      // setOpen(false); // Close quiz after completion
     }
   };
+
+  useEffect(() => {
+    console.log("state data:", location?.state?.questions);
+    if (location?.state?.questions) {
+      setQuestions(location?.state?.questions);
+    }
+  }, []);
 
   return (
     <div
@@ -110,7 +90,11 @@ const QuizView = () => {
       >
         <p className="font-semibold text-lg text-primary">Recent Quizzes</p>
         <div className="w-full flex gap-[20px] my-4">
-          <img src={quizImg1} alt="" className="rounded-xl h-[300px] w-8/12" />
+          <img
+            src={location?.state?.image}
+            alt=""
+            className="rounded-xl h-[300px] w-8/12"
+          />
           <div className="flex flex-col w-5/12">
             <div className="flex gap-[10px] w-full items-center my-3">
               <div className="w-4/12">
@@ -154,7 +138,7 @@ const QuizView = () => {
         </div>
         <div className="w-8/12 my-4 flex justify-between  gap-[20px]">
           <h1 className="text-xl font-semibold w-max">
-            Protecting the Organization from Cyber Attacks
+            {location?.state?.title}
           </h1>
           <div className="flex gap-[3px]">
             <AiOutlineLike className="text-green-600 text-xl cursor-pointer" />
@@ -271,30 +255,36 @@ const QuizView = () => {
       <Dialog open={open} handler={handleOpen} className="rounded-3xl">
         {!isSubmitScreenShow ? (
           <div className="w-full bg-white p-5 rounded-3xl">
-            <h1 className="text-center text-xl font-semibold text-black">
-              Question {currentQuestion + 1}/{questions.length}
-            </h1>
-            <p className="my-4 text-base font-normal text-black">
-              {questions[currentQuestion].question}
-            </p>
+            {questions.length > 0 && questions[currentQuestion] ? (
+              <>
+                <h1 className="text-center text-xl font-semibold text-black">
+                  Question {currentQuestion + 1}/{questions.length}
+                </h1>
+                <p className="my-4 text-base font-normal text-black">
+                  {questions[currentQuestion].question}
+                </p>
 
-            {/**========== options ======== */}
-            <div className="w-full flex flex-col">
-              {questions[currentQuestion].options.map((option) => (
-                <div
-                  key={option.id}
-                  className={`group w-full rounded-xl border px-4 py-4 cursor-pointer my-2 
+                {/**========== options ======== */}
+                <div className="w-full flex flex-col">
+                  {questions[currentQuestion].options.map((option) => (
+                    <div
+                      key={option.id}
+                      className={`group w-full rounded-xl border px-4 py-4 cursor-pointer my-2 
                     ${
                       selectedOption === option.id
                         ? "bg-primary text-white"
                         : "hover:bg-primary hover:text-white"
                     }`}
-                  onClick={() => handleOptionClick(option.id)}
-                >
-                  <p className="text-sm">{option.option}</p>
+                      onClick={() => handleOptionClick(option.id)}
+                    >
+                      <p className="text-sm">{option.option}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <p>Loading questions...</p>
+            )}
 
             <div className="w-full flex justify-end my-3">
               <button
@@ -339,10 +329,9 @@ const QuizView = () => {
               You Scored {(score / questions.length) * 100} %
             </p>
             <div className="w-6/12 flex justify-center my-8">
-             
               <button
                 className="bg-primary text-white rounded-xl px-6 py-2"
-                onClick={() =>setOpen(false)}
+                onClick={() => setOpen(false)}
               >
                 Go Home
               </button>

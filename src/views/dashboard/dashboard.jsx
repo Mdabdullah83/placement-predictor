@@ -30,42 +30,203 @@ const Dashboard = () => {
       image: quizImg1,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of India?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 6?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 2,
       image: quizImg2,
-      title: "Protecting the Organization against Phishing Attacks",
+      title: "hello how are you",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 3,
       image: quizImg3,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 4,
       image: quizImg1,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 5,
       image: quizImg2,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 6,
       image: quizImg3,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
     {
       id: 7,
       image: quizImg1,
       title: "Protecting the Organization against Phishing Attacks",
       time: "15 min",
+      questions: [
+        {
+          id: 1,
+          question: "What is the capital of France?",
+          options: [
+            { id: 1, option: "Paris", isCorrect: true },
+            { id: 2, option: "India", isCorrect: false },
+            { id: 3, option: "Nepal", isCorrect: false },
+            { id: 4, option: "Iceland", isCorrect: false },
+          ],
+        },
+        {
+          id: 2,
+          question: "What is 2 + 2?",
+          options: [
+            { id: 1, option: "3", isCorrect: false },
+            { id: 2, option: "4", isCorrect: true },
+            { id: 3, option: "5", isCorrect: false },
+            { id: 4, option: "6", isCorrect: false },
+          ],
+        },
+        // Add more questions here
+      ],
     },
   ];
   return (
@@ -144,13 +305,17 @@ const Dashboard = () => {
                   image={item.image}
                   title={item.title}
                   time={item.time}
+                  questions={item.questions}
                 />
               ))}
           </div>
         </div>
       </div>
       {/**============= badges content ================== */}
-      <div className="w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-scroll" style={{scrollbarWidth:'none'}}>
+      <div
+        className="w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-scroll"
+        style={{ scrollbarWidth: "none" }}
+      >
         <p className="text-primary font-semibold">Other Users Online</p>
         <div className="w-full flex gap-[20px] flex-wrap justify-between my-4">
           <div className="rounded-full p-3 flex justify-center items-center bg-[#BFF6FF]">
