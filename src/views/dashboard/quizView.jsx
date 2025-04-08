@@ -27,6 +27,7 @@ import { AiOutlineDislike } from "react-icons/ai";
 import { FaQuestion } from "react-icons/fa6";
 
 import { Dialog } from "@material-tailwind/react";
+import axios from "axios";
 
 const QuizView = () => {
   const navigate = useNavigate();
@@ -37,26 +38,68 @@ const QuizView = () => {
   const [score, setScore] = useState(0);
   const [isSubmitScreenShow, setIsSubmitScreenShow] = useState(false);
   const [isScoreScreenShow, setIsScoreScreenShow] = useState(false);
-
   const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleOpen = () => setOpen(!open);
+  // Function to generate quiz via API
+  const generateQuizQuestions = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("quiz_access_token");
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/quiz/generate`,
+        {
+          subject: location.state?.subject || "General Knowledge",
+          topic: location.state?.title || "Mixed Topics",
+          difficulty: "medium",
+          numberOfQuestions: 5,
+          questionType: "multiple_choice",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  // Start quiz by opening dialog
-  const handleStartQuiz = () => {
-    setOpen(true);
-    setCurrentQuestion(0);
-    setSelectedOption(null);
+      // Transform API response to match your expected format
+      const formattedQuestions = response.data.data.questions.map(
+        (q, index) => ({
+          id: index + 1,
+          question: q.questionText,
+          options: q.options.map((opt, optIndex) => ({
+            id: optIndex + 1,
+            option: opt,
+            isCorrect: opt === q.correctAnswer,
+          })),
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation,
+        })
+      );
+
+      setQuestions(formattedQuestions);
+      setOpen(true);
+    } catch (err) {
+      console.error("Quiz generation error:", err);
+      setError(err.response?.data?.message || "Failed to generate quiz");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  // Start quiz by generating questions first
+  const handleStartQuiz = async () => {
+    await generateQuizQuestions();
+  };
   // Handle option selection
   const handleOptionClick = (optionId) => {
     setSelectedOption(optionId);
-
-    if (
-      questions[currentQuestion].options.find((opt) => opt.id === optionId)
-        .isCorrect
-    ) {
+    const currentQ = questions[currentQuestion];
+    if (currentQ.options.find((opt) => opt.id === optionId)?.isCorrect) {
       setScore((prev) => prev + 1);
     }
   };
@@ -71,12 +114,21 @@ const QuizView = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("state data:", location?.state?.questions);
-    if (location?.state?.questions) {
-      setQuestions(location?.state?.questions);
-    }
-  }, []);
+  // Reset quiz state when dialog closes
+  const handleDialogClose = () => {
+    setOpen(false);
+    setCurrentQuestion(0);
+    setSelectedOption(null);
+    setIsSubmitScreenShow(false);
+    setIsScoreScreenShow(false);
+    setScore(0);
+  };
+  // useEffect(() => {
+  //   console.log("state data:", location?.state?.questions);
+  //   if (location?.state?.questions) {
+  //     setQuestions(location?.state?.questions);
+  //   }
+  // }, []);
 
   return (
     <div
@@ -131,9 +183,12 @@ const QuizView = () => {
             <button
               className="text-white bg-primary rounded-lg w-max px-8 py-2 my-4"
               onClick={handleStartQuiz}
+              disabled={isLoading}
             >
-              Start Quiz
+              {isLoading ? "Generating Quiz..." : "Start Quiz"}
             </button>
+            {/* Show error if quiz generation fails */}
+            {error && <div className="text-red-500 my-2">{error}</div>}
           </div>
         </div>
         <div className="w-8/12 my-4 flex justify-between  gap-[20px]">
@@ -252,10 +307,14 @@ const QuizView = () => {
       </div>
 
       {/**=========== dialog box for questions and options */}
-      <Dialog open={open} handler={handleOpen} className="rounded-3xl">
-        {!isSubmitScreenShow ? (
+      <Dialog open={open} handler={handleDialogClose} className="rounded-3xl">
+        {isLoading ? (
+          <div className="w-full bg-white p-5 rounded-3xl flex justify-center items-center h-64">
+            <p>Generating quiz questions...</p>
+          </div>
+        ) : !isSubmitScreenShow ? (
           <div className="w-full bg-white p-5 rounded-3xl">
-            {questions.length > 0 && questions[currentQuestion] ? (
+            {questions.length > 0 ? (
               <>
                 <h1 className="text-center text-xl font-semibold text-black">
                   Question {currentQuestion + 1}/{questions.length}
@@ -270,11 +329,11 @@ const QuizView = () => {
                     <div
                       key={option.id}
                       className={`group w-full rounded-xl border px-4 py-4 cursor-pointer my-2 
-                    ${
-                      selectedOption === option.id
-                        ? "bg-primary text-white"
-                        : "hover:bg-primary hover:text-white"
-                    }`}
+                        ${
+                          selectedOption === option.id
+                            ? "bg-primary text-white"
+                            : "hover:bg-primary hover:text-white"
+                        }`}
                       onClick={() => handleOptionClick(option.id)}
                     >
                       <p className="text-sm">{option.option}</p>
@@ -283,12 +342,14 @@ const QuizView = () => {
                 </div>
               </>
             ) : (
-              <p>Loading questions...</p>
+              <p>No questions available</p>
             )}
 
             <div className="w-full flex justify-end my-3">
               <button
-                className="bg-primary text-white px-8 py-2 rounded-xl"
+                className={`bg-primary text-white px-8 py-2 rounded-xl ${
+                  selectedOption === null ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={handleNextQuestion}
                 disabled={selectedOption === null}
               >
@@ -302,7 +363,7 @@ const QuizView = () => {
               <FaQuestion className="text-white text-6xl" />
             </div>
             <p className="my-5 text-center text-black text-xl">
-              Are you Sure , You want to submit Quiz?
+              Are you sure you want to submit the quiz?
             </p>
             <div className="w-6/12 flex justify-between my-8">
               <button
@@ -323,17 +384,23 @@ const QuizView = () => {
           <div className="w-full bg-white p-5 rounded-3xl flex flex-col justify-center items-center">
             <img src={badgeImg1} alt="" className="my-6" />
             <h1 className="text-center my-2 mt-4 font-semibold text-2xl text-black">
-              Congratulations you have passed
+              {score >= questions.length * 0.7 ? "Congratulations!" : "Quiz Completed"}
             </h1>
             <p className="text-center my-2 text-black">
-              You Scored {(score / questions.length) * 100} %
+              You scored {Math.round((score / questions.length) * 100)}%
             </p>
+            {questions[0]?.explanation && (
+              <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                <h3 className="font-semibold">Explanation:</h3>
+                <p>{questions[0].explanation}</p>
+              </div>
+            )}
             <div className="w-6/12 flex justify-center my-8">
               <button
                 className="bg-primary text-white rounded-xl px-6 py-2"
-                onClick={() => setOpen(false)}
+                onClick={handleDialogClose}
               >
-                Go Home
+                {score >= questions.length * 0.7 ? "Continue" : "Try Again"}
               </button>
             </div>
           </div>

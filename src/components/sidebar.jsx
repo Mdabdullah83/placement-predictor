@@ -5,10 +5,14 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { FaBell } from "react-icons/fa6";
 import { BsBarChart } from "react-icons/bs";
 import { CiLogout } from "react-icons/ci";
-import sidebarSupportImg from '../assets/images/sidebar-support-img.svg';
+import sidebarSupportImg from "../assets/images/sidebar-support-img.svg";
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <div className="w-full flex flex-col justify-between px-3 shadow-xl h-[100vh]">
       <div className="w-full">
@@ -24,7 +28,7 @@ const Sidebar = () => {
                 ? "bg-primary shadow-lg"
                 : "bg-white"
             } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
-            onClick={()=>navigate('/dashboard')}
+            onClick={() => navigate("/dashboard")}
           >
             <MdSpaceDashboard
               className={` ${
@@ -103,13 +107,24 @@ const Sidebar = () => {
       </div>
       <div className="w-full ">
         <div className="w-full bg-primary rounded-2xl p-5">
-            <h1 className="text-white text-xl font-semibold my-1">Support 24/7</h1>
-            <p className=" text-white">Contacts us anytime</p>
-            <button className="text-primary bg-white rounded-lg px-5 my-2 py-1 relative z-[3]">Start</button>
-            <img src={sidebarSupportImg} alt="" className="h-[130px] w-[150px] relative z-[0] right-[-40px] mt-[-50px]" />
+          <h1 className="text-white text-xl font-semibold my-1">
+            Support 24/7
+          </h1>
+          <p className=" text-white">Contacts us anytime</p>
+          <button className="text-primary bg-white rounded-lg px-5 my-2 py-1 relative z-[3]">
+            Start
+          </button>
+          <img
+            src={sidebarSupportImg}
+            alt=""
+            className="h-[130px] w-[150px] relative z-[0] right-[-40px] mt-[-50px]"
+          />
         </div>
-        <div className="flex gap-[10px] items-center my-4 px-2 cursor-pointer">
-          <CiLogout className="text-xl text-red-400"/>
+        <div
+          className="flex gap-[10px] items-center my-4 px-2 cursor-pointer"
+          onClick={() => handleLogout()}
+        >
+          <CiLogout className="text-xl text-red-400" />
           <p className="text-base text-red-400">Logout</p>
         </div>
       </div>
