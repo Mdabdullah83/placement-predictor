@@ -31,6 +31,7 @@ const Dashboard = () => {
       title: "Cybersecurity Fundamentals",
       subject: "Computer Science",
       time: "15 min",
+      description: "Test your knowledge of essential cybersecurity concepts, including threat prevention, data protection, and security best practices. Perfect for beginners and professionals alike.",
       questions: [
         {
           id: 1,
@@ -50,6 +51,7 @@ const Dashboard = () => {
       title: "JavaScript Essentials",
       subject: "Programming",
       time: "20 min",
+      description: "Master the fundamentals of JavaScript programming. This quiz covers variables, functions, objects, and common programming patterns used in modern web development.",
       questions: [
         {
           id: 1,
@@ -69,6 +71,7 @@ const Dashboard = () => {
       title: "World Capitals",
       subject: "Geography",
       time: "10 min",
+      description: "Challenge your knowledge of world geography with this quiz about capital cities. Test your memory of countries and their capitals from around the globe.",
       questions: [
         {
           id: 1,
@@ -88,6 +91,7 @@ const Dashboard = () => {
       title: "Human Anatomy",
       subject: "Biology",
       time: "15 min",
+      description: "Explore the fascinating world of human anatomy. This quiz covers major body systems, organs, and their functions. Perfect for medical students and biology enthusiasts.",
       questions: [
         {
           id: 1,
@@ -107,6 +111,7 @@ const Dashboard = () => {
       title: "Financial Literacy",
       subject: "Economics",
       time: "20 min",
+      description: "Test your understanding of personal finance, investment strategies, and economic principles. This quiz helps you assess your financial knowledge and decision-making skills.",
       questions: [
         {
           id: 1,
@@ -126,6 +131,7 @@ const Dashboard = () => {
       title: "Artificial Intelligence",
       subject: "Computer Science",
       time: "15 min",
+      description: "Dive into the world of AI and machine learning. This quiz covers fundamental concepts, applications, and ethical considerations in artificial intelligence.",
       questions: [
         {
           id: 1,
@@ -145,6 +151,7 @@ const Dashboard = () => {
       title: "Environmental Science",
       subject: "Science",
       time: "10 min",
+      description: "Test your knowledge of environmental issues, climate change, and sustainability. This quiz covers important topics about our planet's health and conservation efforts.",
       questions: [
         {
           id: 1,
@@ -164,15 +171,16 @@ const Dashboard = () => {
       title: "Python Basics",
       subject: "Programming",
       time: "10 min",
+      description: "Test your understanding of Python programming fundamentals. This quiz covers syntax, data structures, and basic programming concepts in Python.",
       questions: [
         {
           id: 1,
-          question: "Which gas is primarily responsible for global warming?",
+          question: "Which of the following is a Python data type?",
           options: [
-            { id: 1, option: "Oxygen", isCorrect: false },
-            { id: 2, option: "Carbon Dioxide", isCorrect: true },
-            { id: 3, option: "Nitrogen", isCorrect: false },
-            { id: 4, option: "Helium", isCorrect: false },
+            { id: 1, option: "List", isCorrect: true },
+            { id: 2, option: "Array", isCorrect: false },
+            { id: 3, option: "Vector", isCorrect: false },
+            { id: 4, option: "Matrix", isCorrect: false },
           ],
         },
       ],
@@ -254,6 +262,7 @@ const Dashboard = () => {
                   image={item.image}
                   title={item.title}
                   time={item.time}
+                  description={item.description}
                   questions={item.questions}
                 />
               ))}

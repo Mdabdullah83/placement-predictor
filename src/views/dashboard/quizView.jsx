@@ -1,33 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaFlag } from "react-icons/fa";
-import { FaClock } from "react-icons/fa";
-import { IoIosCheckmarkCircle } from "react-icons/io";
+import { Dialog } from "@material-tailwind/react";
+import axios from "axios";
+import { 
+  Clock, 
+  Flag, 
+  CheckCircle2, 
+  ThumbsUp, 
+  ThumbsDown, 
+  Power, 
+  Grid, 
+  List, 
+  Pencil 
+} from "lucide-react";
+
+// Import images
 import quizImg1 from "../../assets/images/quiz-item-img-1.png";
 import quizImg2 from "../../assets/images/quiz-item-img-2.png";
 import quizImg3 from "../../assets/images/quiz-item-img-3.png";
-
 import onlineUserImg1 from "../../assets/images/online-user-img-1.svg";
 import onlineUserImg2 from "../../assets/images/online-user-img-2.svg";
 import onlineUserImg3 from "../../assets/images/online-user-img-3.svg";
 import onlineUserImg4 from "../../assets/images/online-user-img-4.svg";
 import onlineUserImg5 from "../../assets/images/online-user-img-5.svg";
 import onlineUserImg6 from "../../assets/images/online-user-img-6.svg";
-
 import badgeImg1 from "../../assets/images/Badge-img-1.svg";
 import badgeImg2 from "../../assets/images/Badge-img-2.svg";
 import badgeImg3 from "../../assets/images/Badge-img-3.svg";
-
-import { RxSwitch } from "react-icons/rx";
-import { IoMdGrid } from "react-icons/io";
-import { IoListOutline } from "react-icons/io5";
-import { FaPencilAlt } from "react-icons/fa";
-import { AiOutlineLike } from "react-icons/ai";
-import { AiOutlineDislike } from "react-icons/ai";
-import { FaQuestion } from "react-icons/fa6";
-
-import { Dialog } from "@material-tailwind/react";
-import axios from "axios";
 
 const QuizView = () => {
   const navigate = useNavigate();
@@ -43,8 +42,8 @@ const QuizView = () => {
   const [error, setError] = useState(null);
 
   const handleOpen = () => setOpen(!open);
-  // Function to generate quiz via API
-  const generateQuizQuestions = async () => {
+
+  const handleStartQuiz = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -55,7 +54,7 @@ const QuizView = () => {
           subject: location.state?.subject || "General Knowledge",
           topic: location.state?.title || "Mixed Topics",
           difficulty: "medium",
-          numberOfQuestions: 5,
+          numberOfQuestions: 10,
           questionType: "multiple_choice",
         },
         {
@@ -66,23 +65,25 @@ const QuizView = () => {
         }
       );
 
-      // Transform API response to match your expected format
-      const formattedQuestions = response.data.data.questions.map(
-        (q, index) => ({
-          id: index + 1,
-          question: q.questionText,
-          options: q.options.map((opt, optIndex) => ({
-            id: optIndex + 1,
-            option: opt,
-            isCorrect: opt === q.correctAnswer,
-          })),
-          correctAnswer: q.correctAnswer,
-          explanation: q.explanation,
-        })
-      );
+      const formattedQuestions = response.data.data.questions.map((q, index) => ({
+        id: index + 1,
+        question: q.questionText,
+        options: q.options.map((opt, optIndex) => ({
+          id: optIndex + 1,
+          option: opt,
+          isCorrect: opt === q.correctAnswer,
+        })),
+        correctAnswer: q.correctAnswer,
+        explanation: q.explanation,
+      }));
 
-      setQuestions(formattedQuestions);
-      setOpen(true);
+      navigate('/dashboard/quiz-detail', { 
+        state: { 
+          questions: formattedQuestions,
+          title: location.state?.title,
+          image: location.state?.image
+        }
+      });
     } catch (err) {
       console.error("Quiz generation error:", err);
       setError(err.response?.data?.message || "Failed to generate quiz");
@@ -91,321 +92,138 @@ const QuizView = () => {
     }
   };
 
-  // Start quiz by generating questions first
-  const handleStartQuiz = async () => {
-    await generateQuizQuestions();
-  };
-  // Handle option selection
-  const handleOptionClick = (optionId) => {
-    setSelectedOption(optionId);
-    const currentQ = questions[currentQuestion];
-    if (currentQ.options.find((opt) => opt.id === optionId)?.isCorrect) {
-      setScore((prev) => prev + 1);
-    }
-  };
-
-  // Move to the next question
-  const handleNextQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedOption(null);
-    } else {
-      setIsSubmitScreenShow(true);
-    }
-  };
-
-  // Reset quiz state when dialog closes
-  const handleDialogClose = () => {
-    setOpen(false);
-    setCurrentQuestion(0);
-    setSelectedOption(null);
-    setIsSubmitScreenShow(false);
-    setIsScoreScreenShow(false);
-    setScore(0);
-  };
-  // useEffect(() => {
-  //   console.log("state data:", location?.state?.questions);
-  //   if (location?.state?.questions) {
-  //     setQuestions(location?.state?.questions);
-  //   }
-  // }, []);
-
   return (
-    <div
-      className="w-full flex gap-[20px] my-2 pb-5 h-full overflow-hidden pe-3"
-      style={{ scrollbarWidth: "none" }}
-    >
-      {/**================= Quiz View content ================== */}
-      <div
-        className="w-9/12 flex flex-col bg-white shadow-lg rounded-2xl border p-5 overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
-      >
-        <p className="font-semibold text-lg text-primary">Recent Quizzes</p>
-        <div className="w-full flex gap-[20px] my-4">
-          <img
-            src={location?.state?.image}
-            alt=""
-            className="rounded-xl h-[300px] w-8/12"
-          />
-          <div className="flex flex-col w-5/12">
-            <div className="flex gap-[10px] w-full items-center my-3">
-              <div className="w-4/12">
-                <p className="text-secondary font-semibold">Date:</p>
-              </div>
-              <div className="w-6/12">
-                <p className="text-sm text-secondary">28/07/2023</p>
-              </div>
-            </div>
-            <div className="flex gap-[10px] w-full items-center my-3">
-              <div className="w-4/12">
-                <p className="text-secondary font-semibold">Time Limit:</p>
-              </div>
-              <div className="w-6/12">
-                <p className="text-sm text-secondary">15 Mins</p>
-              </div>
-            </div>
-            <div className="flex gap-[10px] w-full items-center my-3">
-              <div className="w-4/12">
-                <p className="text-secondary font-semibold">Attempts:</p>
-              </div>
-              <div className="w-6/12">
-                <p className="text-sm text-secondary">Twice</p>
-              </div>
-            </div>
-            <div className="flex gap-[10px] w-full items-center my-3">
-              <div className="w-4/12">
-                <p className="text-secondary font-semibold">Pass Points:</p>
-              </div>
-              <div className="w-6/12">
-                <p className="text-sm text-secondary">80 Points</p>
+    <div className="w-full flex gap-6 p-6 h-full overflow-hidden">
+      {/* Main Quiz Content */}
+      <div className="w-9/12 flex flex-col bg-white rounded-2xl shadow-lg p-6 overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-primary">Quiz Details</h1>
+          <div className="flex items-center gap-4">
+            <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+              <ThumbsUp className="w-5 h-5" />
+              <span className="text-sm">178</span>
+            </button>
+            <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+              <ThumbsDown className="w-5 h-5" />
+              <span className="text-sm">178</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="flex gap-6 mb-8">
+          <div className="w-8/12">
+            <img
+              src={location?.state?.image}
+              alt="Quiz"
+              className="w-full h-[300px] object-cover rounded-xl shadow-md"
+            />
+          </div>
+          <div className="w-4/12 space-y-4">
+            <div className="bg-gray-50 p-4 rounded-xl">
+              <h2 className="text-lg font-semibold text-primary mb-4">Quiz Information</h2>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-primary" />
+                  <span className="text-gray-600">Time Limit: 15 Mins</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Flag className="w-5 h-5 text-primary" />
+                  <span className="text-gray-600">Pass Points: 80 Points</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span className="text-gray-600">Attempts: Twice</span>
+                </div>
               </div>
             </div>
             <button
-              className="text-white bg-primary rounded-lg w-max px-8 py-2 my-4"
               onClick={handleStartQuiz}
               disabled={isLoading}
+              className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Generating Quiz..." : "Start Quiz"}
             </button>
-            {/* Show error if quiz generation fails */}
-            {error && <div className="text-red-500 my-2">{error}</div>}
-          </div>
-        </div>
-        <div className="w-8/12 my-4 flex justify-between  gap-[20px]">
-          <h1 className="text-xl font-semibold w-max">
-            {location?.state?.title}
-          </h1>
-          <div className="flex gap-[3px]">
-            <AiOutlineLike className="text-green-600 text-xl cursor-pointer" />
-            <p className="text-sm">178</p>
-            <AiOutlineDislike className="text-green-600 text-xl cursor-pointer" />
-            <p className="text-sm">178</p>
-          </div>
-        </div>
-        <div className="w-8/12">
-          <p className="my-2 text-secondary text-base">
-            One of the most efficient ways to protect against cyber attacks and
-            all types of data breaches is to train your employees on cyber
-            attack prevention and
-          </p>
-          <p className="my-4 text-secondary text-base">
-            The quiz consists of questions. To be successful with the quizzes,
-            it’s important to conversant with the topic by paying attention to
-            the short video
-          </p>
-          <p className="my-2 text-secondary text-base">
-            To start, click the "Start" button. When finished, click the "Submit
-            " button.
-          </p>
-        </div>
-      </div>
-      {/**============= badges content ================== */}
-      <div
-        className="w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
-      >
-        <p className="text-primary font-semibold">Other Users Online</p>
-        <div className="w-full flex gap-[20px] flex-wrap justify-between my-4">
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#BFF6FF]">
-            <img src={onlineUserImg1} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#BFFFCB]">
-            <img src={onlineUserImg2} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#CAB9D0]">
-            <img src={onlineUserImg3} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#FFDEBF]">
-            <img src={onlineUserImg4} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#FFDEBF]">
-            <img src={onlineUserImg5} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#F7C5BA]">
-            <img src={onlineUserImg6} alt="" className="h-[40px] w-[40px]" />
-          </div>
-        </div>
-        <div className="flex justify-between w-full">
-          <p className="text-primary font-semibold">Achievements</p>
-          <p className="text-primary cursor-pointer hover:text-secondary">
-            View All
-          </p>
-        </div>
-        <div className="w-full flex justify-between my-2">
-          <div className="">
-            <img src={badgeImg1} alt="" className="" />
-            <p className="text-center text-secondary my-2">Comeback</p>
-          </div>
-          <div className="">
-            <img src={badgeImg2} alt="" className="" />
-            <p className="text-center text-secondary my-2">Winner</p>
-          </div>
-          <div className="">
-            <img src={badgeImg3} alt="" className="" />
-            <p className="text-center text-secondary my-2">Lucky</p>
-          </div>
-        </div>
-        <p className="text-primary font-semibold">Reminders</p>
-        <div className="w-full">
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <RxSwitch className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Control Your Account</p>
-              <p className="text-sm text-secondary">Due Today</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <IoMdGrid className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Clear Desk Policy</p>
-              <p className="text-sm text-secondary">Due Next Week</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <IoListOutline className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Use of Flash Drives</p>
-              <p className="text-sm text-secondary">Due November 17</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <FaPencilAlt className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Reporting an Incident</p>
-              <p className="text-sm text-secondary">Due December 20</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/**=========== dialog box for questions and options */}
-      <Dialog open={open} handler={handleDialogClose} className="rounded-3xl">
-        {isLoading ? (
-          <div className="w-full bg-white p-5 rounded-3xl flex justify-center items-center h-64">
-            <p>Generating quiz questions...</p>
-          </div>
-        ) : !isSubmitScreenShow ? (
-          <div className="w-full bg-white p-5 rounded-3xl">
-            {questions.length > 0 ? (
-              <>
-                <h1 className="text-center text-xl font-semibold text-black">
-                  Question {currentQuestion + 1}/{questions.length}
-                </h1>
-                <p className="my-4 text-base font-normal text-black">
-                  {questions[currentQuestion].question}
-                </p>
-
-                {/**========== options ======== */}
-                <div className="w-full flex flex-col">
-                  {questions[currentQuestion].options.map((option) => (
-                    <div
-                      key={option.id}
-                      className={`group w-full rounded-xl border px-4 py-4 cursor-pointer my-2 
-                        ${
-                          selectedOption === option.id
-                            ? "bg-primary text-white"
-                            : "hover:bg-primary hover:text-white"
-                        }`}
-                      onClick={() => handleOptionClick(option.id)}
-                    >
-                      <p className="text-sm">{option.option}</p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p>No questions available</p>
+            {error && (
+              <div className="text-red-500 text-sm mt-2">{error}</div>
             )}
+          </div>
+        </div>
 
-            <div className="w-full flex justify-end my-3">
-              <button
-                className={`bg-primary text-white px-8 py-2 rounded-xl ${
-                  selectedOption === null ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={handleNextQuestion}
-                disabled={selectedOption === null}
-              >
-                {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
-              </button>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-primary">{location?.state?.title}</h2>
+          <div className="prose max-w-none">
+            <p className="text-gray-600 mb-4">{location?.state?.description}</p>
+            <div className="bg-gray-50 p-4 rounded-xl">
+              <h3 className="text-lg font-medium text-primary mb-2">Instructions</h3>
+              <ul className="list-disc list-inside space-y-2 text-gray-600">
+                <li>The quiz consists of multiple-choice questions</li>
+                <li>You have 15 minutes to complete the quiz</li>
+                <li>You need 80 points to pass</li>
+                <li>You can attempt the quiz twice</li>
+                <li>Click the "Start Quiz" button when you're ready</li>
+              </ul>
             </div>
           </div>
-        ) : !isScoreScreenShow ? (
-          <div className="w-full bg-white p-5 rounded-3xl flex flex-col justify-center items-center">
-            <div className="p-8 flex justify-center items-center shadow-xl bg-primary rounded-full mt-6">
-              <FaQuestion className="text-white text-6xl" />
-            </div>
-            <p className="my-5 text-center text-black text-xl">
-              Are you sure you want to submit the quiz?
-            </p>
-            <div className="w-6/12 flex justify-between my-8">
-              <button
-                className="border-2 border-primary rounded-xl px-6 py-2 text-primary"
-                onClick={() => setIsSubmitScreenShow(false)}
-              >
-                No
-              </button>
-              <button
-                className="bg-primary text-white rounded-xl px-6 py-2"
-                onClick={() => setIsScoreScreenShow(true)}
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="w-full bg-white p-5 rounded-3xl flex flex-col justify-center items-center">
-            <img src={badgeImg1} alt="" className="my-6" />
-            <h1 className="text-center my-2 mt-4 font-semibold text-2xl text-black">
-              {score >= questions.length * 0.7 ? "Congratulations!" : "Quiz Completed"}
-            </h1>
-            <p className="text-center my-2 text-black">
-              You scored {Math.round((score / questions.length) * 100)}%
-            </p>
-            {questions[0]?.explanation && (
-              <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                <h3 className="font-semibold">Explanation:</h3>
-                <p>{questions[0].explanation}</p>
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <div className="w-3/12 space-y-6">
+        {/* Online Users */}
+        <div className="bg-white rounded-2xl shadow-lg p-6">
+          <h2 className="text-lg font-semibold text-primary mb-4">Online Users</h2>
+          <div className="grid grid-cols-3 gap-4">
+            {[onlineUserImg1, onlineUserImg2, onlineUserImg3, onlineUserImg4, onlineUserImg5, onlineUserImg6].map((img, index) => (
+              <div key={index} className="bg-gray-50 rounded-full p-2 flex justify-center items-center">
+                <img src={img} alt={`User ${index + 1}`} className="h-10 w-10" />
               </div>
-            )}
-            <div className="w-6/12 flex justify-center my-8">
-              <button
-                className="bg-primary text-white rounded-xl px-6 py-2"
-                onClick={handleDialogClose}
-              >
-                {score >= questions.length * 0.7 ? "Continue" : "Try Again"}
-              </button>
-            </div>
+            ))}
           </div>
-        )}
-      </Dialog>
+        </div>
+
+        {/* Achievements */}
+        <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-primary">Achievements</h2>
+            <button className="text-primary hover:text-primary/80 transition-colors text-sm">
+              View All
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            {[badgeImg1, badgeImg2, badgeImg3].map((img, index) => (
+              <div key={index} className="text-center">
+                <img src={img} alt={`Badge ${index + 1}`} className="w-16 h-16 mx-auto" />
+                <p className="text-sm text-gray-600 mt-2">
+                  {["Comeback", "Winner", "Lucky"][index]}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Reminders */}
+        <div className="bg-white rounded-2xl shadow-lg p-6">
+          <h2 className="text-lg font-semibold text-primary mb-4">Reminders</h2>
+          <div className="space-y-4">
+            {[
+              { icon: <Power className="w-5 h-5" />, title: "Control Your Account", due: "Due Today" },
+              { icon: <Grid className="w-5 h-5" />, title: "Clear Desk Policy", due: "Due Next Week" },
+              { icon: <List className="w-5 h-5" />, title: "Use of Flash Drives", due: "Due November 17" },
+              { icon: <Pencil className="w-5 h-5" />, title: "Reporting an Incident", due: "Due December 20" }
+            ].map((item, index) => (
+              <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                <div className="bg-primary text-white p-2 rounded-lg">
+                  {item.icon}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-800">{item.title}</p>
+                  <p className="text-sm text-gray-500">{item.due}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

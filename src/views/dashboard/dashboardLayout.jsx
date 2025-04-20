@@ -4,7 +4,7 @@ import TopBar from "../../components/topbar";
 import Profile from "./profile";
 import QuizView from "./quizView";
 import Dashboard from "./dashboard";
-
+import QuizDetail from "./quizDetail";
 const DashboardLayout = () => {
   return (
     <div className="w-full flex gap-[20px] h-[100vh] overflow-hidden bg-[#FBF9F9]">
@@ -18,6 +18,7 @@ const DashboardLayout = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/quiz-view" element={<QuizView />} />
+            <Route path="/quiz-detail" element={<QuizDetail />} />
           </Routes>
         </div>
       </div>
