@@ -53,6 +53,7 @@ const Login = () => {
             <label htmlFor="email" className="mb-2 font-medium text-lg">
               Email
             </label>
+            {/**input field */}
             <input
               id="email"
               name="email"
