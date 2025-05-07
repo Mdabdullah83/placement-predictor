@@ -320,7 +320,7 @@ const QuizView = () => {
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Sidebar  */}
         <div className="lg:w-4/12 flex flex-col gap-6">
           {/* Online Users Card */}
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
