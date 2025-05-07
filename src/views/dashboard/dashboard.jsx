@@ -1,358 +1,301 @@
-import profileImg from "../../assets/images/profile-img.png";
-import { FaFlag } from "react-icons/fa";
-import { FaClock } from "react-icons/fa";
-import { IoIosCheckmarkCircle } from "react-icons/io";
-import QuizItemCard from "../../components/quizItemCard";
-import quizImg1 from "../../assets/images/quiz-item-img-1.png";
-import quizImg2 from "../../assets/images/quiz-item-img-2.png";
-import quizImg3 from "../../assets/images/quiz-item-img-3.png";
+"use client";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  CheckCircle,
+  Clock,
+  Flag,
+  Grid,
+  List,
+  PencilLine,
+  SwitchCamera,
+} from "lucide-react";
+import { QuizCard } from "@/components/quizItemCard";
+import quizImg1 from "@/assets/images/cybersecurity-network.png";
+import quizImg2 from "@/assets/images/javascript-code.png";
+import quizImg3 from "@/assets/images/world-map.png";
+import quizImg4 from "@/assets/images/human-anatomy.png";
+import quizImg5 from "@/assets/images/finance-growth.png";
+import quizImg6 from "@/assets/images/artificial-intelligence-network.png";
+import quizImg7 from "@/assets/images/lush-rainforest.png";
+import quizImg8 from "@/assets/images/python-code-snippet.png";
+import badgeImg1 from "@/assets/images/trophy-comeback.png";
+import badgeImg2 from "@/assets/images/trophy-winner.png";
+import badgeImg3 from "@/assets/images/lucky-trophy.png";
+import profileImg from "@/assets/images/profile-portrait.png";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+const quizItems = [
+  {
+    id: 1,
+    image: quizImg1,
+    title: "Cybersecurity Fundamentals",
+    subject: "Computer Science",
+    time: "15 min",
+    description:
+      "Test your knowledge of essential cybersecurity concepts, including threat prevention, data protection, and security best practices.",
+  },
+  {
+    id: 2,
+    image: quizImg2,
+    title: "JavaScript Essentials",
+    subject: "Programming",
+    time: "20 min",
+    description:
+      "Master the fundamentals of JavaScript programming. This quiz covers variables, functions, objects, and common programming patterns.",
+  },
+  {
+    id: 3,
+    image: quizImg3,
+    title: "World Capitals",
+    subject: "Geography",
+    time: "10 min",
+    description:
+      "Challenge your knowledge of world geography with this quiz about capital cities. Test your memory of countries and their capitals.",
+  },
+  {
+    id: 4,
+    image: quizImg4,
+    title: "Human Anatomy",
+    subject: "Biology",
+    time: "15 min",
+    description:
+      "Explore the fascinating world of human anatomy. This quiz covers major body systems, organs, and their functions.",
+  },
+  {
+    id: 5,
+    image: quizImg5,
+    title: "Financial Literacy",
+    subject: "Economics",
+    time: "20 min",
+    description:
+      "Test your understanding of personal finance, investment strategies, and economic principles.",
+  },
+  {
+    id: 6,
+    image: quizImg6,
+    title: "Artificial Intelligence",
+    subject: "Computer Science",
+    time: "15 min",
+    description:
+      "Dive into the world of AI and machine learning. This quiz covers fundamental concepts, applications, and ethical considerations.",
+  },
+  {
+    id: 7,
+    image: quizImg7,
+    title: "Environmental Science",
+    subject: "Science",
+    time: "10 min",
+    description:
+      "Test your knowledge of environmental issues, climate change, and sustainability.",
+  },
+  {
+    id: 8,
+    image: quizImg8,
+    title: "Python Basics",
+    subject: "Programming",
+    time: "10 min",
+    description:
+      "Test your understanding of Python programming fundamentals. This quiz covers syntax, data structures, and basic programming concepts.",
+  },
+];
 
-import onlineUserImg1 from "../../assets/images/online-user-img-1.svg";
-import onlineUserImg2 from "../../assets/images/online-user-img-2.svg";
-import onlineUserImg3 from "../../assets/images/online-user-img-3.svg";
-import onlineUserImg4 from "../../assets/images/online-user-img-4.svg";
-import onlineUserImg5 from "../../assets/images/online-user-img-5.svg";
-import onlineUserImg6 from "../../assets/images/online-user-img-6.svg";
+const onlineUsers = [
+  { id: 1, color: "bg-cyan-100", initial: "JD" },
+  { id: 2, color: "bg-green-100", initial: "MK" },
+  { id: 3, color: "bg-purple-100", initial: "AL" },
+  { id: 4, color: "bg-orange-100", initial: "RB" },
+  { id: 5, color: "bg-orange-100", initial: "TS" },
+  { id: 6, color: "bg-red-100", initial: "PW" },
+];
 
-import badgeImg1 from "../../assets/images/Badge-img-1.svg";
-import badgeImg2 from "../../assets/images/Badge-img-2.svg";
-import badgeImg3 from "../../assets/images/Badge-img-3.svg";
+const badges = [
+  { id: 1, name: "Comeback", image: badgeImg1 },
+  { id: 2, name: "Winner", image: badgeImg2 },
+  { id: 3, name: "Lucky", image: badgeImg3 },
+];
 
-import { RxSwitch } from "react-icons/rx";
-import { IoMdGrid } from "react-icons/io";
-import { IoListOutline } from "react-icons/io5";
-import { FaPencilAlt } from "react-icons/fa";
+const reminders = [
+  {
+    id: 1,
+    title: "Control Your Account",
+    dueDate: "Due Today",
+    icon: <SwitchCamera className="h-5 w-5" />,
+  },
+  {
+    id: 2,
+    title: "Clear Desk Policy",
+    dueDate: "Due Next Week",
+    icon: <Grid className="h-5 w-5" />,
+  },
+  {
+    id: 3,
+    title: "Use of Flash Drives",
+    dueDate: "Due November 17",
+    icon: <List className="h-5 w-5" />,
+  },
+  {
+    id: 4,
+    title: "Reporting an Incident",
+    dueDate: "Due December 20",
+    icon: <PencilLine className="h-5 w-5" />,
+  },
+];
 
 const Dashboard = () => {
-  const quizItemArray = [
-    {
-      id: 1,
-      image: quizImg1,
-      title: "Cybersecurity Fundamentals",
-      subject: "Computer Science",
-      time: "15 min",
-      description: "Test your knowledge of essential cybersecurity concepts, including threat prevention, data protection, and security best practices. Perfect for beginners and professionals alike.",
-      questions: [
-        {
-          id: 1,
-          question: "What is the most common type of cyber attack?",
-          options: [
-            { id: 1, option: "Phishing", isCorrect: true },
-            { id: 2, option: "DDoS", isCorrect: false },
-            { id: 3, option: "SQL Injection", isCorrect: false },
-            { id: 4, option: "Man-in-the-Middle", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      image: quizImg2,
-      title: "JavaScript Essentials",
-      subject: "Programming",
-      time: "20 min",
-      description: "Master the fundamentals of JavaScript programming. This quiz covers variables, functions, objects, and common programming patterns used in modern web development.",
-      questions: [
-        {
-          id: 1,
-          question: "Which keyword is used to declare variables in JavaScript?",
-          options: [
-            { id: 1, option: "var", isCorrect: false },
-            { id: 2, option: "let", isCorrect: false },
-            { id: 3, option: "const", isCorrect: false },
-            { id: 4, option: "All of the above", isCorrect: true },
-          ],
-        },
-      ],
-    },
-    {
-      id: 3,
-      image: quizImg3,
-      title: "World Capitals",
-      subject: "Geography",
-      time: "10 min",
-      description: "Challenge your knowledge of world geography with this quiz about capital cities. Test your memory of countries and their capitals from around the globe.",
-      questions: [
-        {
-          id: 1,
-          question: "What is the capital of Japan?",
-          options: [
-            { id: 1, option: "Beijing", isCorrect: false },
-            { id: 2, option: "Seoul", isCorrect: false },
-            { id: 3, option: "Tokyo", isCorrect: true },
-            { id: 4, option: "Bangkok", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 4,
-      image: quizImg1,
-      title: "Human Anatomy",
-      subject: "Biology",
-      time: "15 min",
-      description: "Explore the fascinating world of human anatomy. This quiz covers major body systems, organs, and their functions. Perfect for medical students and biology enthusiasts.",
-      questions: [
-        {
-          id: 1,
-          question: "How many bones are in the adult human body?",
-          options: [
-            { id: 1, option: "206", isCorrect: true },
-            { id: 2, option: "150", isCorrect: false },
-            { id: 3, option: "300", isCorrect: false },
-            { id: 4, option: "187", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 5,
-      image: quizImg2,
-      title: "Financial Literacy",
-      subject: "Economics",
-      time: "20 min",
-      description: "Test your understanding of personal finance, investment strategies, and economic principles. This quiz helps you assess your financial knowledge and decision-making skills.",
-      questions: [
-        {
-          id: 1,
-          question: "What does 'APR' stand for in banking?",
-          options: [
-            { id: 1, option: "Annual Percentage Rate", isCorrect: true },
-            { id: 2, option: "Average Payment Ratio", isCorrect: false },
-            { id: 3, option: "Accumulated Principal Return", isCorrect: false },
-            { id: 4, option: "Applied Percentage Revenue", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 6,
-      image: quizImg3,
-      title: "Artificial Intelligence",
-      subject: "Computer Science",
-      time: "15 min",
-      description: "Dive into the world of AI and machine learning. This quiz covers fundamental concepts, applications, and ethical considerations in artificial intelligence.",
-      questions: [
-        {
-          id: 1,
-          question: "What does 'ML' stand for in AI?",
-          options: [
-            { id: 1, option: "Machine Learning", isCorrect: true },
-            { id: 2, option: "Meta Language", isCorrect: false },
-            { id: 3, option: "Memory Logic", isCorrect: false },
-            { id: 4, option: "Mainframe Link", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 7,
-      image: quizImg1,
-      title: "Environmental Science",
-      subject: "Science",
-      time: "10 min",
-      description: "Test your knowledge of environmental issues, climate change, and sustainability. This quiz covers important topics about our planet's health and conservation efforts.",
-      questions: [
-        {
-          id: 1,
-          question: "Which gas is primarily responsible for global warming?",
-          options: [
-            { id: 1, option: "Oxygen", isCorrect: false },
-            { id: 2, option: "Carbon Dioxide", isCorrect: true },
-            { id: 3, option: "Nitrogen", isCorrect: false },
-            { id: 4, option: "Helium", isCorrect: false },
-          ],
-        },
-      ],
-    },
-    {
-      id: 8,
-      image: quizImg1,
-      title: "Python Basics",
-      subject: "Programming",
-      time: "10 min",
-      description: "Test your understanding of Python programming fundamentals. This quiz covers syntax, data structures, and basic programming concepts in Python.",
-      questions: [
-        {
-          id: 1,
-          question: "Which of the following is a Python data type?",
-          options: [
-            { id: 1, option: "List", isCorrect: true },
-            { id: 2, option: "Array", isCorrect: false },
-            { id: 3, option: "Vector", isCorrect: false },
-            { id: 4, option: "Matrix", isCorrect: false },
-          ],
-        },
-      ],
-    },
-  ];
+  const [filteredQuizzes, setFilteredQuizzes] = useState(quizItems);
+  const { searchQuery } = useSelector((state) => state?.search);
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = quizItems.filter((quiz) =>
+        quiz.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredQuizzes(filtered);
+    } else {
+      setFilteredQuizzes(quizItems);
+    }
+  }, [searchQuery]);
   return (
-    <div
-      className="w-full flex gap-[20px] my-2 pb-5 h-full overflow-hidden pe-3"
-      style={{ scrollbarWidth: "none" }}
-    >
-      {/**================= dashboard content ================== */}
-      <div
-        className="w-9/12 flex flex-col bg-white shadow-lg rounded-2xl border p-3 overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
-      >
-        {/**=========== profile section ============== */}
-        <div className="w-full flex gap-[20px]">
-          <img
-            src={profileImg}
-            alt=""
-            className="h-[150px] w-[150px] rounded-lg "
-          />
-          <div className="w-9/12 flex flex-col">
-            <h1 className="text-2xl font-semibold text-primary">
+    <div className="flex flex-col lg:flex-row gap-5 pb-5 h-full">
+      {/* Main Dashboard Content */}
+      <div className="w-full lg:w-9/12 flex flex-col bg-white shadow-lg rounded-2xl border p-4 overflow-y-auto">
+        {/* Profile Section */}
+        <div className="w-full flex flex-col md:flex-row gap-5">
+          <div className="relative h-[150px] w-[150px] min-w-[150px] rounded-lg overflow-hidden">
+            <img
+              src={profileImg || "/placeholder.svg"}
+              alt="Profile"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="w-full flex flex-col">
+            <h1 className="text-2xl font-semibold text-purple-700">
               Michael Cliford
             </h1>
-            <p className="text-secondary">Bonus booster 24v</p>
-            <div className="w-8/12 bg-[#e2e2e2] h-[10px] rounded-xl my-2">
-              <div className="w-8/12 bg-primary rounded-xl h-full"></div>
+            <p className="text-gray-500">Bonus booster 24v</p>
+            <div className="w-full md:w-8/12 bg-gray-200 h-[10px] rounded-xl my-2">
+              <Progress value={66} className="h-[10px]" />
             </div>
-            <div className="w-full flex gap-[20px] my-2">
-              <div className="flex gap-[10px]">
+            <div className="w-full flex flex-wrap gap-4 my-2">
+              <div className="flex gap-3">
                 <div className="shadow-lg p-3 rounded-md">
-                  <FaFlag className="text-primary text-[20px]" />
+                  <Flag className="text-purple-700 h-5 w-5" />
                 </div>
-                <div className="">
-                  <h1 className="text-xl text-secondary font-semibold">26</h1>
-                  <p className="text-secondary text-xs">Quiz Passed</p>
+                <div>
+                  <h1 className="text-xl text-gray-700 font-semibold">26</h1>
+                  <p className="text-gray-500 text-xs">Quiz Passed</p>
                 </div>
               </div>
-              <div className="flex gap-[10px]">
+              <div className="flex gap-3">
                 <div className="shadow-lg p-3 rounded-md">
-                  <FaClock className="text-primary text-[20px]" />
+                  <Clock className="text-purple-700 h-5 w-5" />
                 </div>
-                <div className="">
-                  <h1 className="text-xl text-secondary font-semibold">
+                <div>
+                  <h1 className="text-xl text-gray-700 font-semibold">
                     28 min
                   </h1>
-                  <p className="text-secondary text-xs">Fastet Time</p>
+                  <p className="text-gray-500 text-xs">Fastest Time</p>
                 </div>
               </div>
-              <div className="flex gap-[10px]">
+              <div className="flex gap-3">
                 <div className="shadow-lg p-3 rounded-md">
-                  <IoIosCheckmarkCircle className="text-primary text-[20px]" />
+                  <CheckCircle className="text-purple-700 h-5 w-5" />
                 </div>
-                <div className="">
-                  <h1 className="text-xl text-secondary font-semibold">220</h1>
-                  <p className="text-secondary text-xs">Correct Answers</p>
+                <div>
+                  <h1 className="text-xl text-gray-700 font-semibold">220</h1>
+                  <p className="text-gray-500 text-xs">Correct Answers</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/**=========== quizzes section ============== */}
-        <div className="w-full my-3">
-          <div className="w-full flex justify-between ">
-            <p className="text-primary font-semibold text-lg">
+
+        {/* Quizzes Section */}
+        <div className="w-full my-5">
+          <div className="w-full flex justify-between items-center mb-4">
+            <h2 className="text-purple-700 font-semibold text-lg">
               Featured Quizzes
-            </p>
-            <p className="text-primary font-medium cursor-pointer hover:text-secondary">
+            </h2>
+            <Button
+              variant="link"
+              className="text-purple-700 hover:text-purple-900 p-0"
+            >
               View All
-            </p>
+            </Button>
           </div>
-          <div className="w-full flex flex-wrap">
-            {Array.isArray(quizItemArray) &&
-              quizItemArray.map((item, index) => (
-                <QuizItemCard
-                  key={index}
-                  image={item.image}
-                  title={item.title}
-                  time={item.time}
-                  description={item.description}
-                  questions={item.questions}
-                />
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+            {filteredQuizzes.map((quiz) => (
+              <QuizCard key={quiz.id} quiz={quiz} />
+            ))}
+            {filteredQuizzes.length === 0 && (
+              <div className="col-span-3 text-center text-gray-500">
+                No quizzes found.
+              </div>
+            )}
           </div>
         </div>
       </div>
-      {/**============= badges content ================== */}
-      <div
-        className="w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
-      >
-        <p className="text-primary font-semibold">Other Users Online</p>
-        <div className="w-full flex gap-[20px] flex-wrap justify-between my-4">
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#BFF6FF]">
-            <img src={onlineUserImg1} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#BFFFCB]">
-            <img src={onlineUserImg2} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#CAB9D0]">
-            <img src={onlineUserImg3} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#FFDEBF]">
-            <img src={onlineUserImg4} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#FFDEBF]">
-            <img src={onlineUserImg5} alt="" className="h-[40px] w-[40px]" />
-          </div>
-          <div className="rounded-full p-3 flex justify-center items-center bg-[#F7C5BA]">
-            <img src={onlineUserImg6} alt="" className="h-[40px] w-[40px]" />
-          </div>
+
+      {/* Sidebar Content */}
+      <div className="w-full lg:w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-auto">
+        {/* Online Users */}
+        <h3 className="text-purple-700 font-semibold mb-4">
+          Other Users Online
+        </h3>
+        <div className="flex flex-wrap gap-3 justify-between mb-6">
+          {onlineUsers.map((user) => (
+            <div
+              key={user.id}
+              className={`rounded-full p-3 flex justify-center items-center ${user.color}`}
+            >
+              <div className="h-10 w-10 flex items-center justify-center font-medium text-gray-700">
+                {user.initial}
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="flex justify-between w-full">
-          <p className="text-primary font-semibold">Achievements</p>
-          <p className="text-primary cursor-pointer hover:text-secondary">
+
+        {/* Achievements */}
+        <div className="flex justify-between w-full items-center mb-3">
+          <h3 className="text-purple-700 font-semibold">Achievements</h3>
+          <Button
+            variant="link"
+            className="text-purple-700 hover:text-purple-900 p-0"
+          >
             View All
-          </p>
+          </Button>
         </div>
-        <div className="w-full flex justify-between my-2">
-          <div className="">
-            <img src={badgeImg1} alt="" className="" />
-            <p className="text-center text-secondary my-2">Comeback</p>
-          </div>
-          <div className="">
-            <img src={badgeImg2} alt="" className="" />
-            <p className="text-center text-secondary my-2">Winner</p>
-          </div>
-          <div className="">
-            <img src={badgeImg3} alt="" className="" />
-            <p className="text-center text-secondary my-2">Lucky</p>
-          </div>
+        <div className="flex justify-between mb-6">
+          {badges.map((badge) => (
+            <div key={badge.id} className="flex flex-col items-center">
+              <div className="relative h-16 w-16">
+                <img
+                  src={badge.image || "/placeholder.svg"}
+                  alt={badge.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <p className="text-center text-gray-500 mt-2">{badge.name}</p>
+            </div>
+          ))}
         </div>
-        <p className="text-primary font-semibold">Reminders</p>
-        <div className="w-full">
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <RxSwitch className="text-white text-2xl" />
+
+        {/* Reminders */}
+        <h3 className="text-purple-700 font-semibold mb-4">Reminders</h3>
+        <div className="space-y-4">
+          {reminders.map((reminder) => (
+            <div key={reminder.id} className="flex gap-3 items-center">
+              <div className="rounded-xl bg-purple-700 p-2 flex justify-center items-center">
+                <div className="text-white">{reminder.icon}</div>
+              </div>
+              <div>
+                <p className="text-gray-800 font-medium">{reminder.title}</p>
+                <p className="text-sm text-gray-500">{reminder.dueDate}</p>
+              </div>
             </div>
-            <div className="">
-              <p className="text-black font-medium">Control Your Account</p>
-              <p className="text-sm text-secondary">Due Today</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <IoMdGrid className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Clear Desk Policy</p>
-              <p className="text-sm text-secondary">Due Next Week</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <IoListOutline className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Use of Flash Drives</p>
-              <p className="text-sm text-secondary">Due November 17</p>
-            </div>
-          </div>
-          <div className="flex  w-full my-5 gap-[10px]">
-            <div className="rounded-xl bg-primary p-2 px-3 flex justify-center items-center">
-              <FaPencilAlt className="text-white text-2xl" />
-            </div>
-            <div className="">
-              <p className="text-black font-medium">Reporting an Incident</p>
-              <p className="text-sm text-secondary">Due December 20</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

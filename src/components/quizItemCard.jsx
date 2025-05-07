@@ -1,72 +1,68 @@
-import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { FaClock } from "react-icons/fa";
 
-const QuizItemCard = ({ image, title, time, questions, description }) => {
+export function QuizCard({ quiz }) {
   const navigate = useNavigate();
-  
+
   const handleNavigate = () => {
-    navigate('/dashboard/quiz-view', {
+    navigate("/dashboard/quiz-view", {
       state: {
-        image: image,
-        title: title,
-        time: time,
-        questions: questions,
-        description: description
-      }
+        image: quiz?.image,
+        title: quiz?.title,
+        time: quiz?.time,
+        questions: quiz?.questions,
+        description: quiz?.description,
+      },
     });
   };
-
-  useEffect(()=>{
-    console.log("questions:",questions);
-  },[])
-
   return (
-    <div 
-      className="w-4/12 flex justify-center items-center px-2 py-2 transition-all duration-300 hover:scale-[1.02]"
-      onClick={handleNavigate}
-    >
-      <div className="h-[280px] w-full rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
-        <div 
-          className="h-full w-full bg-cover bg-center relative"
-          style={{ backgroundImage: `url(${image})` }}
-        >
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-          
-          {/* Content */}
-          <div className="absolute inset-0 flex flex-col justify-between p-6">
-            {/* Top Section */}
-            <div className="flex justify-between items-start">
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 flex items-center gap-2">
-                <FaClock className="text-primary text-sm" />
-                <span className="text-primary text-sm font-medium">{time}</span>
-              </div>
-            </div>
-
-            {/* Bottom Section */}
-            <div className="space-y-3">
-              <h3 className="text-white text-xl font-semibold group-hover:text-primary transition-colors duration-300">
-                {title}
-              </h3>
-              <p className="text-white/80 text-sm line-clamp-2 group-hover:text-white transition-colors duration-300">
-                {description}
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-white/60 text-xs">
-                  {questions?.length || 0} questions
-                </span>
-                <span className="text-white/60 text-xs">•</span>
-                <span className="text-white/60 text-xs">
-                  {Math.ceil((questions?.length || 0) * 1.5)} min
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <Card className="overflow-hidden h-full flex flex-col">
+      <div className="relative h-40 w-full">
+        <img
+          src={quiz?.image || "/placeholder.svg"}
+          alt={quiz.title}
+          fill
+          className="object-cover h-full w-full"
+        />
       </div>
-    </div>
+      <CardHeader className="p-4 pb-0">
+        <div className="flex justify-between items-start">
+          <CardTitle className="text-lg font-semibold">{quiz.title}</CardTitle>
+          <Badge
+            variant="outline"
+            className="flex items-center gap-1 bg-purple-50"
+          >
+            <Clock className="h-3 w-3" />
+            {quiz.time}
+          </Badge>
+        </div>
+        <Badge className="w-fit bg-purple-700 hover:bg-purple-800">
+          {quiz.subject}
+        </Badge>
+      </CardHeader>
+      <CardContent className="p-4 flex-grow">
+        <CardDescription className="text-sm line-clamp-3">
+          {quiz.description}
+        </CardDescription>
+      </CardContent>
+      <CardFooter className="p-4 pt-0">
+        <Button
+          className="w-full bg-purple-700 hover:bg-purple-800"
+          onClick={() => handleNavigate()}
+        >
+          Start Quiz
+        </Button>
+      </CardFooter>
+    </Card>
   );
-};
-
-export default QuizItemCard;
+}
