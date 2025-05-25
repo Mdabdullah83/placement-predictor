@@ -19,6 +19,13 @@ import {
   Bookmark,
 } from "lucide-react";
 import axios from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import onlineUsersImg1 from "@/assets/images/online-user-img-1.svg";
 import onlineUsersImg2 from "@/assets/images/online-user-img-2.svg";
@@ -31,6 +38,9 @@ const QuizView = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(
+    location.state?.level || "intermediate"
+  );
 
   const handleStartQuiz = async () => {
     setIsLoading(true);
@@ -40,11 +50,10 @@ const QuizView = () => {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/quiz/generate`,
         {
-          subject: location.state?.subject || "General Knowledge",
-          topic: location.state?.title || "Mixed Topics",
-          difficulty: "medium",
+          jobRole: location.state?.jobRole || "Software Engineer",
+          level: selectedLevel,
+          category: location.state?.category || "Technical Skills",
           numberOfQuestions: 10,
-          questionType: "multiple_choice",
         },
         {
           headers: {
@@ -236,6 +245,29 @@ const QuizView = () => {
                       </div>
                       <span className="font-medium text-gray-800">2 Tries</span>
                     </div>
+                  </div>
+                </div>
+                <div className="space-y-4 mb-4">
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="level"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Select Difficulty Level
+                    </label>
+                    <Select
+                      value={selectedLevel}
+                      onValueChange={setSelectedLevel}
+                    >
+                      <SelectTrigger id="level" className="w-full">
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="beginner">Beginner</SelectItem>
+                        <SelectItem value="intermediate">Intermediate</SelectItem>
+                        <SelectItem value="advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <button
