@@ -1,16 +1,20 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginImg from "../assets/images/login-img.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/reducers/authSlice";
 const Login = () => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -24,7 +28,9 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login Successfully");
-        localStorage.setItem('quiz_access_token',response.data.data.token)
+        localStorage.setItem("role", response?.data?.data?.user?.role);
+        localStorage.setItem("quiz_access_token", response.data.data.token);
+        dispatch(setUser(response?.data?.data?.user));
         navigate("/dashboard");
         setLoading(false);
       }
@@ -35,11 +41,11 @@ const Login = () => {
     }
   };
 
-  useEffect(()=>{
-    if(localStorage.getItem('quiz_access_token')){
-      navigate('/dashboard');
+  useEffect(() => {
+    if (localStorage.getItem("quiz_access_token")) {
+      navigate("/dashboard");
     }
-  },[])
+  }, []);
 
   return (
     <div className="w-full flex items-center justify-center gap-[20px] bg-white py-10 overflow-y-hidden h-[100vh]">
@@ -117,7 +123,10 @@ const Login = () => {
             </button>
           )}
 
-          <p className="text-center cursor-pointer" onClick={()=>navigate('/signUp')}>
+          <p
+            className="text-center cursor-pointer"
+            onClick={() => navigate("/signUp")}
+          >
             {" "}
             Don't have an account?{" "}
             <span className="text-red-600 font-semibold">Sign up</span>

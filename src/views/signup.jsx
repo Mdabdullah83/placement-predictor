@@ -10,6 +10,9 @@ const SignUp = () => {
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [department, setDepartment] = useState(null);
+  const [year, setYear] = useState(null);
+  const [university, setUniversity] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleLogin = async (e) => {
@@ -23,6 +26,9 @@ const SignUp = () => {
           email,
           password,
           role: "user",
+          department,
+          year,
+          university,
         }
       );
       if (response.status === 201) {
@@ -79,6 +85,51 @@ const SignUp = () => {
             />
           </div>
           <div className="w-full flex flex-col mt-4 my-3">
+            <label htmlFor="department" className="mb-2 font-medium text-lg">
+              Department
+            </label>
+            <input
+              id="department"
+              name="department"
+              type="text"
+              required
+              className="border-[1px] w-full border-gray-500 rounded-2xl p-3 shadow-sm focus:outline-none"
+              placeholder="Enter Your department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+            />
+          </div>
+          <div className="w-full flex flex-col mt-4 my-3">
+            <label htmlFor="year" className="mb-2 font-medium text-lg">
+              Year
+            </label>
+            <input
+              id="year"
+              name="year"
+              type="number"
+              required
+              className="border-[1px] w-full border-gray-500 rounded-2xl p-3 shadow-sm focus:outline-none"
+              placeholder="Enter Your year"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            />
+          </div>
+          <div className="w-full flex flex-col mt-4 my-3">
+            <label htmlFor="university" className="mb-2 font-medium text-lg">
+              University Name
+            </label>
+            <input
+              id="university"
+              name="university"
+              type="text"
+              required
+              className="border-[1px] w-full border-gray-500 rounded-2xl p-3 shadow-sm focus:outline-none"
+              placeholder="Enter Your university"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+            />
+          </div>
+          <div className="w-full flex flex-col mt-4 my-3">
             <label htmlFor="password" className="mb-2 font-medium text-lg">
               Password
             </label>
@@ -127,7 +178,7 @@ const SignUp = () => {
             </button>
           )}
 
-          <p className="text-center" onClick={()=>navigate('/login')}>
+          <p className="text-center" onClick={() => navigate("/login")}>
             {" "}
             Already have an account?{" "}
             <span className="text-red-600 font-semibold">Login</span>
