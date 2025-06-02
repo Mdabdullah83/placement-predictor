@@ -51,36 +51,10 @@ const Sidebar = () => {
               Dashboard
             </p>
           </div>
-          <div
-            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
-              location.pathname === "/dashboard/notification" ||
-              location.pathname === "/dashboard/notification/"
-                ? "bg-primary shadow-lg"
-                : "bg-white"
-            } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
-          >
-            <FaBell
-              className={` ${
-                location.pathname === "/dashboard/notification" ||
-                location.pathname === "/dashboard/notification/"
-                  ? "text-white"
-                  : "text-primary"
-              }  group-hover:text-white text-lg`}
-            />
-            <p
-              className={` ${
-                location.pathname === "/dashboard/notification" ||
-                location.pathname === "/dashboard/notification/"
-                  ? "text-white"
-                  : "text-secondary"
-              } group-hover:text-white text-base`}
-            >
-              Notifications
-            </p>
-          </div>
+
           {role === "admin" && (
             <div
-              onClick={()=>navigate("/dashboard/quiz-list")}
+              onClick={() => navigate("/dashboard/quiz-list")}
               className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
                 location.pathname === "/dashboard/quiz-list" ||
                 location.pathname === "/dashboard/quiz-list/"

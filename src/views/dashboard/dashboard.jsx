@@ -175,7 +175,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-5 pb-5 h-full">
       {/* Main Dashboard Content */}
-      <div className="w-full lg:w-9/12 flex flex-col bg-white shadow-lg rounded-2xl border p-4 overflow-y-auto">
+      <div className="w-full  flex flex-col bg-white shadow-lg rounded-2xl border p-4 overflow-y-auto">
         {/* Profile Section */}
         <div className="w-full flex flex-col md:flex-row gap-5">
           <div className="relative h-[150px] w-[150px] min-w-[150px] rounded-lg overflow-hidden">
@@ -254,67 +254,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Sidebar Content */}
-      <div className="w-full lg:w-3/12 shadow-lg p-5 border rounded-2xl overflow-y-auto">
-        {/* Online Users */}
-        <h3 className="text-purple-700 font-semibold mb-4">
-          Other Users Online
-        </h3>
-        <div className="flex flex-wrap gap-3 justify-between mb-6">
-          {onlineUsers.map((user) => (
-            <div
-              key={user.id}
-              className={`rounded-full p-3 flex justify-center items-center ${user.color}`}
-            >
-              <div className="h-10 w-10 flex items-center justify-center font-medium text-gray-700">
-                {user.initial}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Achievements */}
-        <div className="flex justify-between w-full items-center mb-3">
-          <h3 className="text-purple-700 font-semibold">Achievements</h3>
-          <Button
-            variant="link"
-            className="text-purple-700 hover:text-purple-900 p-0"
-          >
-            View All
-          </Button>
-        </div>
-        <div className="flex justify-between mb-6">
-          {badges.map((badge) => (
-            <div key={badge.id} className="flex flex-col items-center">
-              <div className="relative h-16 w-16">
-                <img
-                  src={badge.image || "/placeholder.svg"}
-                  alt={badge.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <p className="text-center text-gray-500 mt-2">{badge.name}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Reminders */}
-        <h3 className="text-purple-700 font-semibold mb-4">Reminders</h3>
-        <div className="space-y-4">
-          {reminders.map((reminder) => (
-            <div key={reminder.id} className="flex gap-3 items-center">
-              <div className="rounded-xl bg-purple-700 p-2 flex justify-center items-center">
-                <div className="text-white">{reminder.icon}</div>
-              </div>
-              <div>
-                <p className="text-gray-800 font-medium">{reminder.title}</p>
-                <p className="text-sm text-gray-500">{reminder.dueDate}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+     
     </div>
   );
 };

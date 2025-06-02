@@ -163,7 +163,7 @@ const QuizView = () => {
     <div className="w-full h-full bg-gray-50 p-6 overflow-auto">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
         {/* Main Content Area */}
-        <div className="lg:w-8/12 flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-6">
           {/* Quiz Header Card */}
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -352,108 +352,7 @@ const QuizView = () => {
           </div>
         </div>
 
-        {/* Sidebar  */}
-        <div className="lg:w-4/12 flex flex-col gap-6">
-          {/* Online Users Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-600" />
-                <span>Online Users</span>
-              </h2>
-              <span className="bg-indigo-100 text-indigo-600 text-xs font-medium px-2 py-1 rounded-full">
-                {onlineUsers.length} active
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {onlineUsers.slice(0, 6).map((user) => (
-                <div key={user.id} className="group relative">
-                  <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden border-2 border-white shadow-sm hover:ring-2 hover:ring-indigo-300 transition-all">
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                  <div className="hidden group-hover:block absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap">
-                    {user.name}
-                  </div>
-                </div>
-              ))}
-              {onlineUsers.length > 6 && (
-                <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium shadow-sm border-2 border-white">
-                  +{onlineUsers.length - 6}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Achievements Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Award className="w-5 h-5 text-indigo-600" />
-                <span>Achievements</span>
-              </h2>
-              <button className="text-indigo-600 hover:text-indigo-700 transition-colors text-sm font-medium">
-                View All
-              </button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {achievements.map((achievement) => (
-                <div
-                  key={achievement.id}
-                  className="flex flex-col items-center gap-2"
-                >
-                  <div
-                    className={`w-16 h-16 ${achievement.color} rounded-full flex items-center justify-center text-2xl shadow-sm`}
-                  >
-                    {achievement.icon}
-                  </div>
-                  <p className="text-sm text-gray-600 text-center font-medium">
-                    {achievement.name}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Reminders Card */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Bell className="w-5 h-5 text-indigo-600" />
-                <span>Reminders</span>
-              </h2>
-              <span className="bg-indigo-100 text-indigo-600 text-xs font-medium px-2 py-1 rounded-full">
-                4 tasks
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {reminders.map((reminder, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
-                >
-                  <div className={`${reminder.color} p-2 rounded-lg`}>
-                    {reminder.icon}
-                  </div>
-                  <div className="flex-grow">
-                    <p className="font-medium text-gray-800">
-                      {reminder.title}
-                    </p>
-                    <p className="text-xs text-gray-500">Due: {reminder.due}</p>
-                  </div>
-                  <div className="w-2 h-2 bg-indigo-600 rounded-full"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+       
       </div>
     </div>
   );
