@@ -14,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -28,6 +28,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login Successfully");
+        localStorage.setItem("user",JSON.stringify(response?.data?.data?.user))
         localStorage.setItem("role", response?.data?.data?.user?.role);
         localStorage.setItem("quiz_access_token", response.data.data.token);
         dispatch(setUser(response?.data?.data?.user));

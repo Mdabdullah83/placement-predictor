@@ -6,11 +6,20 @@ import QuizView from "./quizView";
 import Dashboard from "./dashboard";
 import QuizDetail from "./quizDetail";
 import AdminDashboard from "./admin/dashboard";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/reducers/authSlice";
+import QuizList from "./admin/quizList";
 const DashboardLayout = () => {
+  const dispatch = useDispatch();
   const role = localStorage.getItem("role");
   const renderDashboardContent = () => {
     return role === "user" ? <Dashboard /> : <AdminDashboard />;
   };
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    dispatch(setUser(user));
+  }, []);
   return (
     <div className="w-full flex gap-[20px] h-[100vh] overflow-hidden bg-[#FBF9F9]">
       <div className="w-2/12">
@@ -30,6 +39,7 @@ const DashboardLayout = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/quiz-view" element={<QuizView />} />
             <Route path="/quiz-detail" element={<QuizDetail />} />
+            <Route path="/quiz-list" element={<QuizList />} />
           </Routes>
         </div>
       </div>

@@ -1,10 +1,11 @@
 import React from "react";
 import { CiSearch } from "react-icons/ci";
 import profileImg from "../assets/images/profile-img.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSearchQuery } from "@/store/reducers/searchSlice";
 const TopBar = () => {
   const [searchValue, setSearchValue] = React.useState("");
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -33,7 +34,7 @@ const TopBar = () => {
           alt=""
           className="rounded-full h-[50px] w-[50px]"
         />
-        <p className="text-secondary">Michal Ciliford</p>
+        <p className="text-secondary">{user?.username || "Michal Ciliford"}</p>
       </div>
     </div>
   );

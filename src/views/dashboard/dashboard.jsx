@@ -34,7 +34,8 @@ const quizItems = [
     level: "intermediate",
     category: "Technical Skills",
     time: "15 min",
-    description: "Prepare for your frontend developer interview with questions covering React, JavaScript, CSS, and modern web development best practices.",
+    description:
+      "Prepare for your frontend developer interview with questions covering React, JavaScript, CSS, and modern web development best practices.",
   },
   {
     id: 2,
@@ -44,8 +45,10 @@ const quizItems = [
     level: "advanced",
     category: "Technical Skills",
     time: "20 min",
-    description: "Advanced JavaScript concepts and patterns commonly asked in senior frontend developer interviews.",
-  },  {
+    description:
+      "Advanced JavaScript concepts and patterns commonly asked in senior frontend developer interviews.",
+  },
+  {
     id: 3,
     image: quizImg3,
     title: "Backend System Design",
@@ -53,7 +56,8 @@ const quizItems = [
     level: "advanced",
     category: "System Design",
     time: "25 min",
-    description: "Advanced system design questions focused on scalability, performance, and distributed systems architecture.",
+    description:
+      "Advanced system design questions focused on scalability, performance, and distributed systems architecture.",
   },
   {
     id: 4,
@@ -63,7 +67,8 @@ const quizItems = [
     level: "intermediate",
     category: "Problem Solving",
     time: "30 min",
-    description: "Common DSA interview questions with real-world applications and optimization techniques.",
+    description:
+      "Common DSA interview questions with real-world applications and optimization techniques.",
   },
   {
     id: 5,
@@ -73,8 +78,10 @@ const quizItems = [
     level: "beginner",
     category: "Technical Skills",
     time: "20 min",
-    description: "Essential full stack development concepts covering both frontend and backend technologies.",
-  },  {
+    description:
+      "Essential full stack development concepts covering both frontend and backend technologies.",
+  },
+  {
     id: 6,
     image: quizImg6,
     title: "Machine Learning Engineer",
@@ -82,7 +89,8 @@ const quizItems = [
     level: "advanced",
     category: "Technical Skills",
     time: "25 min",
-    description: "Advanced machine learning concepts, model optimization, and real-world ML system design questions.",
+    description:
+      "Advanced machine learning concepts, model optimization, and real-world ML system design questions.",
   },
   {
     id: 7,
@@ -92,7 +100,8 @@ const quizItems = [
     level: "intermediate",
     category: "Technical Skills",
     time: "20 min",
-    description: "Essential DevOps concepts including CI/CD, containerization, and cloud infrastructure management.",
+    description:
+      "Essential DevOps concepts including CI/CD, containerization, and cloud infrastructure management.",
   },
   {
     id: 8,
@@ -102,7 +111,8 @@ const quizItems = [
     level: "beginner",
     category: "Soft Skills",
     time: "15 min",
-    description: "Core product management concepts, user research, and product development lifecycle questions.",
+    description:
+      "Core product management concepts, user research, and product development lifecycle questions.",
   },
 ];
 
@@ -151,6 +161,7 @@ const reminders = [
 const Dashboard = () => {
   const [filteredQuizzes, setFilteredQuizzes] = useState(quizItems);
   const { searchQuery } = useSelector((state) => state?.search);
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     if (searchQuery) {
       const filtered = quizItems.filter((quiz) =>
@@ -177,7 +188,7 @@ const Dashboard = () => {
           </div>
           <div className="w-full flex flex-col">
             <h1 className="text-2xl font-semibold text-purple-700">
-              Michael Cliford
+              {user?.username}
             </h1>
             <p className="text-gray-500">Bonus booster 24v</p>
             <div className="w-full md:w-8/12 bg-gray-200 h-[10px] rounded-xl my-2">

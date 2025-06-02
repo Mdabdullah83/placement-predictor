@@ -6,9 +6,11 @@ import { FaBell } from "react-icons/fa6";
 import { BsBarChart } from "react-icons/bs";
 import { CiLogout } from "react-icons/ci";
 import sidebarSupportImg from "../assets/images/sidebar-support-img.svg";
+import { useSelector } from "react-redux";
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { role } = useSelector((state) => state.auth);
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -76,33 +78,65 @@ const Sidebar = () => {
               Notifications
             </p>
           </div>
-          <div
-            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
-              location.pathname === "/dashboard/quiz" ||
-              location.pathname === "/dashboard/quiz/"
-                ? "bg-primary shadow-lg"
-                : "bg-white"
-            } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
-          >
-            <BsBarChart
-              className={` ${
-                location.pathname === "/dashboard/quiz" ||
-                location.pathname === "/dashboard/quiz/"
-                  ? "text-white"
-                  : "text-primary"
-              }  group-hover:text-white text-lg`}
-            />
-            <p
-              className={` ${
-                location.pathname === "/dashboard/quiz" ||
-                location.pathname === "/dashboard/quiz/"
-                  ? "text-white"
-                  : "text-secondary"
-              } group-hover:text-white text-base`}
+          {role === "admin" && (
+            <div
+              onClick={()=>navigate("/dashboard/quiz-list")}
+              className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
+                location.pathname === "/dashboard/quiz-list" ||
+                location.pathname === "/dashboard/quiz-list/"
+                  ? "bg-primary shadow-lg"
+                  : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
             >
-              Quiz History
-            </p>
-          </div>
+              <BsBarChart
+                className={` ${
+                  location.pathname === "/dashboard/quiz-list" ||
+                  location.pathname === "/dashboard/quiz-list/"
+                    ? "text-white"
+                    : "text-primary"
+                }  group-hover:text-white text-lg`}
+              />
+              <p
+                className={` ${
+                  location.pathname === "/dashboard/quiz-list" ||
+                  location.pathname === "/dashboard/quiz-list/"
+                    ? "text-white"
+                    : "text-secondary"
+                } group-hover:text-white text-base`}
+              >
+                Quiz List
+              </p>
+            </div>
+          )}
+          {role === "user" && (
+            <div
+              className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
+                location.pathname === "/dashboard/quiz" ||
+                location.pathname === "/dashboard/quiz/"
+                  ? "bg-primary shadow-lg"
+                  : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
+            >
+              <BsBarChart
+                className={` ${
+                  location.pathname === "/dashboard/quiz" ||
+                  location.pathname === "/dashboard/quiz/"
+                    ? "text-white"
+                    : "text-primary"
+                }  group-hover:text-white text-lg`}
+              />
+              <p
+                className={` ${
+                  location.pathname === "/dashboard/quiz" ||
+                  location.pathname === "/dashboard/quiz/"
+                    ? "text-white"
+                    : "text-secondary"
+                } group-hover:text-white text-base`}
+              >
+                Quiz History
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full ">
