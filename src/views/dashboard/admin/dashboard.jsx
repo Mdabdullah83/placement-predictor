@@ -1,45 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Users, GraduationCap, Building2, Calendar, Mail, User } from "lucide-react";
+import axios from "axios";
 
 const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Mock data for demonstration (replace with your actual API call)
-  const mockStudents = [
-    {
-      "_id": "683d5f7a563b522726a2acc6",
-      "username": "Testing user",
-      "email": "testing@gmail.com",
-      "department": "CS & IT",
-      "year": "3",
-      "university": "Manuu",
-      "role": "user",
-      "createdAt": "2025-06-02T08:23:22.917Z"
-    },
-    {
-      "_id": "683d62e51e0d5390f39d1101",
-      "username": "Testing2",
-      "email": "testing2@gmail.com",
-      "department": "CS &IT",
-      "year": "4",
-      "university": "AMU",
-      "role": "user",
-      "createdAt": "2025-06-02T08:37:57.982Z"
-    }
-  ];
 
   const handleGetStudentList = async () => {
     try {
       setLoading(true);
-      // Simulate API call delay
-      setTimeout(() => {
-        setStudents(mockStudents);
-        setLoading(false);
-      }, 1000);
+
       
-      // Your actual API call would go here:
-      /*
+
       const token = localStorage.getItem("quiz_access_token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/all-users`,
@@ -52,10 +25,12 @@ const Dashboard = () => {
       if (response?.status === 200) {
         setStudents(response?.data?.data);
       }
-      */
+
     } catch (error) {
       console.log("error while getting list:", error);
       setLoading(false);
+    }finally{
+      setLoading(false)
     }
   };
 

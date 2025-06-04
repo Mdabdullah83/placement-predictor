@@ -48,7 +48,7 @@ const SignUp = () => {
       <div className="w-6/12 flex items-center justify-center">
         <img src={SignUpImg} alt="login img" className="h-[90vh] w-" />
       </div>
-      <div className="w-6/12 flex items-center justify-center">
+      <div className="w-6/12 flex items-center justify-center h-full overflow-y-scroll">
         <form onSubmit={(e) => handleLogin(e)} className="w-8/12">
           <h1 className="text-4xl font-bold mb-2">Sign Up</h1>
           <p className="text-gray-600 text-lg">
